@@ -6,6 +6,35 @@
             }
         </style>
     @endpush
+    @push('js')
+        <script>
+            function formatRupiah(angka) {
+                let cleaned = angka.replace(/\D/g, ""); // Bersihkan dari non-digit
+                let length = cleaned.length;
+
+                // Jika panjang angka lebih dari 2, lakukan pemisahan dengan titik setiap 3 digit
+                if (length > 2) {
+                    let integerPart = cleaned.substring(0, length - 2);
+                    let decimalPart = cleaned.substring(length - 2, length);
+
+                    integerPart = integerPart.split("").reverse().join("")
+                        .match(/.{1,3}/g)
+                        .join(".")
+                        .split("").reverse().join("");
+
+                    return `${integerPart},${decimalPart}`;
+                } else {
+                    // Jika panjang angka kurang dari atau sama dengan 2, anggap sebagai bagian desimal saja
+                    return cleaned;
+                }
+            }
+            var total_donasi = document.getElementById("total_donasi");
+            total_donasi.value = formatRupiah(total_donasi.value);
+            total_donasi.addEventListener("keyup", function(e) {
+                total_donasi.value = formatRupiah(this.value);
+            });
+        </script>
+    @endpush
     <div class="p-4 sm:ml-64">
         <div class="flex justify-between mt-20 p-4">
             <div>
@@ -39,20 +68,19 @@
             <div class="mx-auto max-w-full h-full">
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-visible h-full z-0 p-4">
-                    <form action="{{ route('informasi.update',$data->id) }}" method="POST" class="w-full mx-auto" enctype="multipart/form-data">
-                    @method('PUT')
+                    <form action="{{ route('donasi.store') }}" method="POST" class="w-full mx-auto" enctype="multipart/form-data">
                     @csrf
-                    <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 sm:gap-6 mb-5">
+                    <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 sm:gap-6 mb-5 space-y-2">
                         <div class="col-span-2 sm:col-span-2">
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
-                            <input type="text" name="title" value="{{ old('title',$data->title) }}" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukkan nama">
+                            <input type="text" name="title" value="{{ old('title') }}" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukkan nama">
                         </div>
                         <div class="col-span-2 sm:col-span-2">
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Kategori</label>
                             <select name="kategori" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="">
                                 <option value="0">Pilih Status</option>
                                 @foreach ($kategori as $item)
-                                    <option value="{{ $item->id }}" {{ old('title',$data->kategori_id) == $item->id ? 'selected' : '' }}>{{ ucwords($item->title) }}</option>
+                                    <option value="{{ $item->id }}" {{ old('title') == $item->id ? 'selected' : '' }}>{{ ucwords($item->title) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -62,7 +90,7 @@
                                     name="sub_content"
                                     rows="8"
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Masukkan sub content">{{ old('sub_content',$data->sub_content) }}</textarea>
+                                    placeholder="Masukkan sub content">{{ old('sub_content') }}</textarea>
                         </div>
                         <div class="col-span-2 sm:col-span-2">
                             <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
@@ -70,11 +98,7 @@
                                     name="content"
                                     rows="8"
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Masukkan content">{!! old('content',$data->content) !!}</textarea>
-                        </div>
-                        <div class="col-span-2 sm:col-span-2">
-                            <label for="wali_santri" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover</label>
-                            <img id="foto_santri" src="https://flowbite.com/docs/images/examples/image-2@2x.jpg" class="h-auto max-w-xs rounded-lg" alt="">
+                                    placeholder="Masukkan content">{!! old('content') !!}</textarea>
                         </div>
                         <div class="col-span-2 sm:col-span-2">
                             <label for="wali_santri" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover</label>
@@ -83,6 +107,14 @@
                                     type="file"
                                     name="file_input">
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+                        </div>
+                        <div>
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total Donasi</label>
+                            <input type="text" name="total_donasi" value="{{ old('total_donasi') }}" id="total_donasi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukkan total donasi">
+                        </div>
+                        <div>
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total Donatur</label>
+                            <input type="text" name="total_donatur" value="{{ old('total_donatur') }}" id="total_donatur" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukkan total donatur">
                         </div>
                     </div>
                     <hr>

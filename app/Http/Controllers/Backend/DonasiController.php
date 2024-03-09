@@ -3,32 +3,29 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Informasi;
-use App\Models\Kategori;
+use App\Models\Donasi;
+use App\Models\KategoriDonasi;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
-class InformasiController extends Controller
+class DonasiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $param;
     public function index()
     {
-        $param['title'] = "List Informasi";
-        $param['data'] = Informasi::with('kategori')->latest()->get();
+        $param['title'] = "List Donasi";
+        $param['data'] = Donasi::with('kategori')->latest()->get();
 
-        $title = 'Delete Informasi!';
+        $title = 'Delete Donasi!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
 
-        return view('informasi.index',$param);
-
+        return view('donasi.index',$param);
     }
 
     /**
@@ -36,9 +33,9 @@ class InformasiController extends Controller
      */
     public function create()
     {
-        $param['title'] = 'Tambah Informasi';
-        $param['kategori'] = Kategori::where('status_informasi','informasi')->latest()->get();
-        return view('informasi.create',$param);
+        $param['title'] = 'Tambah Donasi';
+        $param['kategori'] = KategoriDonasi::latest()->get();
+        return view('donasi.create',$param);
     }
 
     /**
@@ -65,33 +62,35 @@ class InformasiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         }
         DB::beginTransaction();
         try {
             DB::commit();
-            $tambah = new Informasi;
+            $tambah = new Donasi;
             if ($request->hasFile('file_input')) {
                 $file = $request->file('file_input');
                 $filename = str_replace(' ','-',$request->get('title')).'.'.$file->extension();
-                $file->storeAs('public/cover/'.$filename);
+                $file->storeAs('public/donasi/'.$filename);
                 $tambah->cover = $filename;
             }
             $tambah->title = $request->get('title');
             $tambah->kategori_id = $request->get('kategori');
-            $tambah->status_informasi = 'informasi';
             $tambah->status = 'pending';
             $tambah->user_id = auth()->user()->id;
             $tambah->content = $request->get('content');
             $tambah->sub_content = $request->get('sub_content');
+            $tambah->total_dana = $request->has('total_donasi') ? $this->formatNumber($request->get('total_donasi')) : 0;
+            $tambah->total_donatur = $request->has('total_donatur') ? $request->get('total_donatur') : 0;
             $tambah->slug = Str::slug($request->get('title'));
             $tambah->save();
             alert()->success('Sukses','Berhasil menambahkan data.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         } catch (Exception $th) {
+            return $th;
             DB::rollBack();
-            alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            alert()->error('Error','Terjadi kesalahan.');
+            return redirect()->route('donasi.index');
         }
     }
 
@@ -101,8 +100,8 @@ class InformasiController extends Controller
     public function show(string $id)
     {
         $param['title'] = 'Show Data';
-        $param['data'] = Informasi::with('kategori','user')->find($id);
-        return view('informasi.show',$param);
+        $param['data'] = Donasi::with('kategori','user')->find($id);
+        return view('donasi.show',$param);
     }
 
     /**
@@ -110,10 +109,10 @@ class InformasiController extends Controller
      */
     public function edit(string $id)
     {
-        $param['title'] = 'Edit Informasi';
-        $param['kategori'] = Kategori::where('status_informasi','informasi')->latest()->get();
-        $param['data'] = Informasi::findOrFail($id);
-        return view('informasi.edit',$param);
+        $param['title'] = 'Show Data';
+        $param['kategori'] = KategoriDonasi::latest()->get();
+        $param['data'] = Donasi::with('kategori','user')->find($id);
+        return view('donasi.edit',$param);
     }
 
     /**
@@ -124,7 +123,8 @@ class InformasiController extends Controller
         $validateData = Validator::make($request->all(),[
             'title' => 'required',
             'kategori' => 'required|not_in:0',
-            'content' => 'required'
+            'content' => 'required',
+            'sub_content' => 'required',
         ],[
             'required' => ':attribute data harus terisi',
         ],[
@@ -139,36 +139,31 @@ class InformasiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         }
         DB::beginTransaction();
         try {
             DB::commit();
-            $edit = Informasi::find($id);
+            $update = Donasi::find($id);
             if ($request->hasFile('file_input')) {
-                $path = 'public/cover/' . $edit->cover;
-                Storage::delete($path);
-
                 $file = $request->file('file_input');
                 $filename = str_replace(' ','-',$request->get('title')).'.'.$file->extension();
-                $file->storeAs('public/cover/'.$filename);
-                $edit->cover = $filename;
+                $file->storeAs('public/donasi/'.$filename);
+                $update->cover = $filename;
             }
-            $edit->title = $request->get('title');
-            $edit->kategori_id = $request->get('kategori');
-            $edit->status_informasi = 'informasi';
-            $edit->status = 'pending';
-            $edit->user_id = auth()->user()->id;
-            $edit->content = $request->get('content');
-            $edit->sub_content = $request->get('sub_content');
-            $edit->slug = Str::slug($request->get('title'));
-            $edit->update();
+            $update->title = $request->get('title');
+            $update->kategori_id = $request->get('kategori');
+            $update->user_id = auth()->user()->id;
+            $update->content = $request->get('content');
+            $update->sub_content = $request->get('sub_content');
+            $update->slug = Str::slug($request->get('title'));
+            $update->update();
             alert()->success('Sukses','Berhasil mengganti data.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         } catch (Exception $th) {
             DB::rollBack();
-            alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            alert()->error('Error','Terjadi kesalahan.');
+            return redirect()->route('donasi.index');
         }
     }
 
@@ -179,30 +174,75 @@ class InformasiController extends Controller
     {
         DB::beginTransaction();
         try {
-            $delete = Informasi::find($id);
+            $delete = Donasi::find($id);
             if ($delete->cover) {
-                $path = 'public/cover/' . $delete->cover;
+                $path = 'public/donasi/' . $delete->cover;
                 Storage::delete($path);
             }
             $delete->delete();
             alert()->success('Sukses','Berhasil dihapus.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         }
+    }
+
+    public function updateDonasiDetail(Request $request, $id) {
+        $data = Donasi::with('kategori','user')->find($request->get('id'));
+        return $data;
+    }
+
+    public function updateDonasi(Request $request) {
+        $validateData = Validator::make($request->all(),[
+            'total_donasi' => 'required',
+            'total_donatur' => 'required|not_in:0',
+            'status' => 'required',
+        ],[
+            'required' => ':attribute data harus terisi',
+        ]);
+        if ($validateData->fails()) {
+            $html = "<ol class='max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400'>";
+            foreach($validateData->errors()->getMessages() as $error) {
+                $html .= "<li>$error[0]</li>";
+            }
+            $html .= "</ol>";
+
+            alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
+            return redirect()->route('donasi.index');
+        }
+        DB::beginTransaction();
+        try {
+            DB::commit();
+            $update = Donasi::find($request->get('id'));
+            $update->total_dana = $request->has('total_donasi') ? $this->formatNumber($request->get('total_donasi')) : 0;
+            $update->total_donatur = $request->has('total_donatur') ? $request->get('total_donatur') : 0;
+            $update->status_donasi = $request->get('status');
+            $update->update();
+            alert()->success('Sukses','Berhasil mengganti status dana.');
+            return redirect()->route('donasi.index');
+        } catch (Exception $th) {
+            DB::rollBack();
+            alert()->error('Error','Terjadi kesalahan.');
+            return redirect()->route('donasi.index');
+        }
+    }
+
+    public function formatNumber($param)
+    {
+        $cleaned = str_replace(['.', ','], '', $param);
+        return (int)$cleaned;
     }
 
     public function updateDetail($id) {
         $param['title'] = 'Update Data';
-        $param['data'] = Informasi::with('kategori','user')->find($id);
-        return view('informasi.update',$param);
+        $param['data'] = Donasi::with('kategori','user')->find($id);
+        return view('donasi.update',$param);
     }
 
     public function updatePost(Request $request) {
-
-          $validateData = Validator::make($request->all(),[
+        $validateData = Validator::make($request->all(),[
             'kategori' => 'required|not_in:0',
         ],[
             'required' => ':attribute data harus terisi',
@@ -217,20 +257,20 @@ class InformasiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         }
         DB::beginTransaction();
         try {
             DB::commit();
-            $update = Informasi::find($request->get('id'));
+            $update = Donasi::find($request->get('id'));
             $update->status = $request->get('kategori');
             $update->update();
             alert()->success('Sukses','Berhasil mengganti status data.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('donasi.index');
         }
     }
 }

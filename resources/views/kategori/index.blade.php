@@ -105,6 +105,7 @@
                                 <tr>
                                     <th class="px-4 py-3">No</th>
                                     <th scope="col" class="px-4 py-3">Kategori</th>
+                                    <th scope="col" class="px-4 py-3">Status</th>
                                     <th scope="col" class="px-4 py-3">Tanggal</th>
                                     <th scope="col" class="px-4 py-3">
                                         <span class="sr-only">Actions</span>
@@ -116,6 +117,7 @@
                                     <tr class="border-b dark:border-gray-700">
                                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->title) }}</th>
+                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->status_informasi) }}</th>
                                         <td class="px-4 py-3">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}</td>
                                         <td class="px-4 py-3 flex items-center justify-end">
                                             <button id="{{ $item->id }}-button" data-dropdown-toggle="{{ $item->id }}-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">

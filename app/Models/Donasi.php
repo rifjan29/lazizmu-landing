@@ -5,20 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Informasi extends Model
+class Donasi extends Model
 {
     use HasFactory;
-    protected $table = 'informasi';
+    protected $table = 'donasi';
     protected $fillable = [
         'cover',
         'title',
+        'slug',
         'kategori_id',
-        'status_informasi',
         'status',
+        'status_donasi',
         'user_id',
+        'total_dana',
+        'total_donatur',
         'content',
         'sub_content',
-        'slug',
     ];
 
     function kategori() {

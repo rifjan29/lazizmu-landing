@@ -12,23 +12,21 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class InformasiController extends Controller
+class BeritaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $param;
     public function index()
     {
-        $param['title'] = "List Informasi";
-        $param['data'] = Informasi::with('kategori')->latest()->get();
+        $param['title'] = "List Berita";
+        $param['data'] = Informasi::with('kategori')->where('status_informasi','berita')->latest()->get();
 
-        $title = 'Delete Informasi!';
+        $title = 'Delete Berita!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
 
-        return view('informasi.index',$param);
-
+        return view('berita.index',$param);
     }
 
     /**
@@ -36,9 +34,9 @@ class InformasiController extends Controller
      */
     public function create()
     {
-        $param['title'] = 'Tambah Informasi';
-        $param['kategori'] = Kategori::where('status_informasi','informasi')->latest()->get();
-        return view('informasi.create',$param);
+        $param['title'] = 'Tambah Berita';
+        $param['kategori'] = Kategori::where('status_informasi','berita')->latest()->get();
+        return view('berita.create',$param);
     }
 
     /**
@@ -50,7 +48,7 @@ class InformasiController extends Controller
             'title' => 'required',
             'kategori' => 'required|not_in:0',
             'content' => 'required',
-            'sub_content' => 'required',
+            'sub_content' => 'required'
         ],[
             'required' => ':attribute data harus terisi',
         ],[
@@ -65,7 +63,7 @@ class InformasiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         }
         DB::beginTransaction();
         try {
@@ -79,7 +77,7 @@ class InformasiController extends Controller
             }
             $tambah->title = $request->get('title');
             $tambah->kategori_id = $request->get('kategori');
-            $tambah->status_informasi = 'informasi';
+            $tambah->status_informasi = 'berita';
             $tambah->status = 'pending';
             $tambah->user_id = auth()->user()->id;
             $tambah->content = $request->get('content');
@@ -87,11 +85,11 @@ class InformasiController extends Controller
             $tambah->slug = Str::slug($request->get('title'));
             $tambah->save();
             alert()->success('Sukses','Berhasil menambahkan data.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         }
     }
 
@@ -102,7 +100,7 @@ class InformasiController extends Controller
     {
         $param['title'] = 'Show Data';
         $param['data'] = Informasi::with('kategori','user')->find($id);
-        return view('informasi.show',$param);
+        return view('berita.show',$param);
     }
 
     /**
@@ -111,9 +109,9 @@ class InformasiController extends Controller
     public function edit(string $id)
     {
         $param['title'] = 'Edit Informasi';
-        $param['kategori'] = Kategori::where('status_informasi','informasi')->latest()->get();
+        $param['kategori'] = Kategori::where('status_informasi','berita')->latest()->get();
         $param['data'] = Informasi::findOrFail($id);
-        return view('informasi.edit',$param);
+        return view('berita.edit',$param);
     }
 
     /**
@@ -124,7 +122,8 @@ class InformasiController extends Controller
         $validateData = Validator::make($request->all(),[
             'title' => 'required',
             'kategori' => 'required|not_in:0',
-            'content' => 'required'
+            'content' => 'required',
+            'sub_content' => 'required'
         ],[
             'required' => ':attribute data harus terisi',
         ],[
@@ -139,7 +138,7 @@ class InformasiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         }
         DB::beginTransaction();
         try {
@@ -156,7 +155,7 @@ class InformasiController extends Controller
             }
             $edit->title = $request->get('title');
             $edit->kategori_id = $request->get('kategori');
-            $edit->status_informasi = 'informasi';
+            $edit->status_informasi = 'berita';
             $edit->status = 'pending';
             $edit->user_id = auth()->user()->id;
             $edit->content = $request->get('content');
@@ -164,11 +163,11 @@ class InformasiController extends Controller
             $edit->slug = Str::slug($request->get('title'));
             $edit->update();
             alert()->success('Sukses','Berhasil mengganti data.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         }
     }
 
@@ -186,18 +185,18 @@ class InformasiController extends Controller
             }
             $delete->delete();
             alert()->success('Sukses','Berhasil dihapus.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         }
     }
 
     public function updateDetail($id) {
         $param['title'] = 'Update Data';
         $param['data'] = Informasi::with('kategori','user')->find($id);
-        return view('informasi.update',$param);
+        return view('berita.update',$param);
     }
 
     public function updatePost(Request $request) {
@@ -217,7 +216,7 @@ class InformasiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         }
         DB::beginTransaction();
         try {
@@ -226,11 +225,11 @@ class InformasiController extends Controller
             $update->status = $request->get('kategori');
             $update->update();
             alert()->success('Sukses','Berhasil mengganti status data.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('informasi.index');
+            return redirect()->route('berita.index');
         }
     }
 }

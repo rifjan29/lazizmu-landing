@@ -39,7 +39,7 @@
             <div class="mx-auto max-w-full h-full">
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-visible h-full z-0 p-4">
-                    <form action="{{ route('informasi.update',$data->id) }}" method="POST" class="w-full mx-auto" enctype="multipart/form-data">
+                    <form action="{{ route('berita.update',$data->id) }}" method="POST" class="w-full mx-auto" enctype="multipart/form-data">
                     @method('PUT')
                     @csrf
                     <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 sm:gap-6 mb-5">

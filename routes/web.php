@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Backend\BeritaController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\DonasiController;
 use App\Http\Controllers\Backend\InformasiController;
 use App\Http\Controllers\Backend\KategoriController;
+use App\Http\Controllers\Backend\KategoriDonasiController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Contracts\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +28,23 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
     Route::prefix('dashboard')->group(function () {
-        // kategori
+        // kategori - Kategori donasi
         Route::resource('kategori', KategoriController::class);
+        Route::resource('kategori-donasi', KategoriDonasiController::class);
         // Informasi
+        Route::post('informasi/update-status',[InformasiController::class,'updatePost'])->name('informasi.updatePost');
+        Route::get('informasi/update-status/{id}',[InformasiController::class,'updateDetail'])->name('informasi.updateDetail');
         Route::resource('informasi', InformasiController::class);
+        // Berita
+        Route::post('berita/update-status',[BeritaController::class,'updatePost'])->name('berita.updatePost');
+        Route::get('berita/update-status/{id}',[BeritaController::class,'updateDetail'])->name('berita.updateDetail');
+        Route::resource('berita', BeritaController::class);
+        // Donasi
+        Route::post('donasi/update-donasi',[DonasiController::class,'updateDonasi'])->name('donasi.updateDonasi');
+        Route::get('donasi/update-donasi/{id}',[DonasiController::class,'updateDonasiDetail'])->name('donasi.updateDonasiDetail');
+        Route::post('donasi/update-status',[DonasiController::class,'updatePost'])->name('donasi.updatePost');
+        Route::get('donasi/update-status/{id}',[DonasiController::class,'updateDetail'])->name('donasi.updateDetail');
+        Route::resource('donasi', DonasiController::class);
 
     });
 });
