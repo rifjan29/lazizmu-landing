@@ -71,7 +71,7 @@
                                             <img class="h-auto max-w-12 rounded-lg" src="{{ $item->cover != null ? asset('storage/cover/'.$item->cover) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" alt="image description">
                                         </th>
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->title) }}</th>
-                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->kategori->title) }}</th>
+                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->kategori?->title) }}</th>
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             @role('admin')
                                                 <span class="text-yellow-400 font-semibold">

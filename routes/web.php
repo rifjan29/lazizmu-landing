@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\BeritaController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DonasiController;
@@ -45,7 +46,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('donasi/update-status',[DonasiController::class,'updatePost'])->name('donasi.updatePost');
         Route::get('donasi/update-status/{id}',[DonasiController::class,'updateDetail'])->name('donasi.updateDetail');
         Route::resource('donasi', DonasiController::class);
-
+        // Banner
+        Route::resource('banner',BannerController::class);
+        //Galeri
+        Route::resource('galeri',\App\Http\Controllers\Backend\GaleriController::class);
+        Route::get('pengguna',[\App\Http\Controllers\Backend\PenggunaController::class,'index'])->name('pengguna.index');
     });
 });
 

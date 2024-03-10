@@ -174,6 +174,7 @@ class DonasiController extends Controller
     {
         DB::beginTransaction();
         try {
+            DB::commit();
             $delete = Donasi::find($id);
             if ($delete->cover) {
                 $path = 'public/donasi/' . $delete->cover;

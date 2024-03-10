@@ -179,6 +179,7 @@ class InformasiController extends Controller
     {
         DB::beginTransaction();
         try {
+            DB::commit();
             $delete = Informasi::find($id);
             if ($delete->cover) {
                 $path = 'public/cover/' . $delete->cover;
