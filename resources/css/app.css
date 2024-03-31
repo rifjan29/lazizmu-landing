@@ -2,6 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    font-family: "Poppins", sans-serif;
+}
+.card-animation-right {
+    animation: moveCardRight 20s linear infinite;
+}
+.card-animation-left {
+    animation: moveCardLeft 20s linear infinite;
+}
+.mastering-tools .tools-slideshow {
+    overflow: hidden;
+    transform: translateZ(0);
+    position: relative;
+    height: auto;
+}
+@keyframes moveCardRight {
+    0% {
+        transform: translateX(0%);
+    }
+
+    50% {
+        transform: translateX(50%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+@keyframes moveCardLeft {
+    0% {
+        transform: translateX(0%);
+    }
+
+    50% {
+        transform: translateX(-50%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+.card-animation-right:hover {
+    animation-play-state: paused;
+}
+.card-animation-left:hover {
+    animation-play-state: paused;
+}
 .active{
     @apply bg-blue-600 text-white ;
 }
@@ -13,4 +61,10 @@
 }
 .active-subMenu {
     @apply bg-gray-100 text-gray-900 ;
+}
+.text-content{
+    @apply font-normal text-gray-400 text-justify text-sm leading-relaxed;
+}
+.text-header{
+    @apply mb-2 text-2xl font-bold tracking-tight text-orange-700 dark:text-white;
 }

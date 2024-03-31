@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\InformasiController;
 use App\Http\Controllers\Backend\KategoriController;
 use App\Http\Controllers\Backend\KategoriDonasiController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
 
@@ -22,10 +23,10 @@ use Spatie\Permission\Contracts\Role;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Frontend
+Route::get('/',[WelcomeController::class,'index'])->name('welcome');
 
+// BACKEND
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
     Route::prefix('dashboard')->group(function () {
@@ -53,11 +54,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('pengguna',[\App\Http\Controllers\Backend\PenggunaController::class,'index'])->name('pengguna.index');
     });
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
