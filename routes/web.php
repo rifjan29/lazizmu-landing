@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\InformasiController;
 use App\Http\Controllers\Backend\KategoriController;
 use App\Http\Controllers\Backend\KategoriDonasiController;
 use App\Http\Controllers\Backend\TentangKamiController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -55,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('banner',BannerController::class);
         //Galeri
         Route::resource('galeri',\App\Http\Controllers\Backend\GaleriController::class);
-        Route::get('pengguna',[\App\Http\Controllers\Backend\PenggunaController::class,'index'])->name('pengguna.index');
+        Route::resource('user', UserController::class);
         //Tentang Kami
         Route::resource('tentang-kami',TentangKamiController::class);
     });

@@ -15,16 +15,15 @@
             $('.show-data').on('click',function() {
                 let id = $(this).data('id');
                 $.ajax({
-                    url: `{{ route('kategori.show', 1) }}`,
+                    url: `{{ route('user.show', 1) }}`,
                     data: {
                         id: id
                     },
                     method: "GET",
                     success: (res) => {
                         // Assuming you have a modal with an ID 'show-modal'
-                        $('#show-modal #name').val(res.title);
-                        $('#show-modal #kategori').val(res.status_informasi);
-                        $('#show-modal #keterangan').val(res.keterangan);
+                        $('#show-modal #name').val(res.name);
+                        $('#show-modal #email').val(res.email);
                         // Show the modal
                         $('#show-modal').removeClass('hidden');
 
@@ -90,23 +89,24 @@
             <div class="mx-auto max-w-full h-full">
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-visible h-full z-0 p-4">
-                   <div class="mb-3 flex justify-end">
-                        <button data-modal-target="tambah-modal" data-modal-toggle="tambah-modal"  class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                            <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-                            </svg>
-                            Tambah Kategori
-                        </button>
-                   </div>
+                    @role('super-admin')
+                    <div class="mb-3 flex justify-end">
+                         <button data-modal-target="tambah-modal" data-modal-toggle="tambah-modal"  class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                             <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                 <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                             </svg>
+                             Tambah Pengguna
+                         </button>
+                    </div>
                     <hr>
+                    @endrole
                     <div class="overflow-x-auto w-full mt-5">
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" id="datatable">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th class="px-4 py-3">No</th>
-                                    <th scope="col" class="px-4 py-3">Kategori</th>
-                                    <th scope="col" class="px-4 py-3">Status</th>
-                                    <th scope="col" class="px-4 py-3">Tanggal</th>
+                                    <th scope="col" class="px-4 py-3">Nama </th>
+                                    <th scope="col" class="px-4 py-3">Email</th>
                                     <th scope="col" class="px-4 py-3">
                                         <span class="sr-only">Actions</span>
                                     </th>
@@ -116,9 +116,8 @@
                                 @foreach ($data as $item)
                                     <tr class="border-b dark:border-gray-700">
                                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
-                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->title) }}</th>
-                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->status_informasi) }}</th>
-                                        <td class="px-4 py-3">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}</td>
+                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ ucwords($item->name) }}</th>
+                                        <td class="px-4 py-3">{{ $item->email }}</td>
                                         <td class="px-4 py-3 flex items-center justify-end">
                                             <button id="{{ $item->id }}-button" data-dropdown-toggle="{{ $item->id }}-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
                                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -130,15 +129,13 @@
                                                     <li>
                                                         <a href="#" data-modal-target="show-modal" data-modal-toggle="show-modal" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white show-data" data-id="{{ $item->id }}">Show</a>
                                                     </li>
-                                                    <li>
-                                                        <a href="#" data-modal-target="edit-modal" data-modal-toggle="edit-modal" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white edit-data" data-id="{{ $item->id }}">Edit</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('kategori.destroy', $item->id) }}" data-confirm-delete="true" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
-                                                    </li>
                                                 </ul>
-                                                <div class="py-1">
 
+                                                @role('super-admin')
+                                                    <div class="py-1">
+                                                        <a href="{{ route('user.destroy', $item->id) }}" data-confirm-delete="true" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
+                                                    </div>
+                                                @endrole
                                             </div>
                                         </td>
                                     </tr>
