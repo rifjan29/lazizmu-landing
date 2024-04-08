@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\BeritaController;
+use App\Http\Controllers\BeritaController as FrontendBeritaController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DonasiController;
 use App\Http\Controllers\Backend\InformasiController;
 use App\Http\Controllers\Backend\KategoriController;
 use App\Http\Controllers\Backend\KategoriDonasiController;
+use App\Http\Controllers\Backend\TentangKamiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +27,8 @@ use Spatie\Permission\Contracts\Role;
 
 // Frontend
 Route::get('/',[WelcomeController::class,'index'])->name('welcome');
+Route::get('berita',[FrontendBeritaController::class,'index'])->name('frontend.berita.index');
+Route::get('berita/{slug}',[FrontendBeritaController::class,'detail'])->name('frontend.berita.detail');
 
 // BACKEND
 Route::middleware(['auth'])->group(function () {
@@ -52,6 +56,8 @@ Route::middleware(['auth'])->group(function () {
         //Galeri
         Route::resource('galeri',\App\Http\Controllers\Backend\GaleriController::class);
         Route::get('pengguna',[\App\Http\Controllers\Backend\PenggunaController::class,'index'])->name('pengguna.index');
+        //Tentang Kami
+        Route::resource('tentang-kami',TentangKamiController::class);
     });
 });
 Route::middleware('auth')->group(function () {

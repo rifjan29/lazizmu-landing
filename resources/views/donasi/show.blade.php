@@ -41,7 +41,7 @@
                     <article class="mx-auto w-full format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
                         <img class="max-h-96 w-1/2 mx-auto transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="{{ $data->cover != null ? asset('storage/donasi/'.$data->cover) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" alt="image description">
                         <header class="mb-4 lg:mb-6 not-format">
-                            <span class="my-3 inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ ucwords($data->kategori->title) }}</span>
+                            <span class="my-3 inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ ucwords($data->kategori->title ?? "-") }}</span>
                             <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">{{ ucwords($data->title) }}</h1>
                             <address class="flex items-center mb-6 not-italic">
                                 <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">

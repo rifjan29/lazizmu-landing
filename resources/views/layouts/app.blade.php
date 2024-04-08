@@ -9,8 +9,8 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
 
         {{-- datatable  --}}
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.tailwindcss.css">
@@ -75,6 +75,20 @@
                 ['view', ['codeview']]
                 ]
             });
+        $('.summernote').summernote({
+            placeholder: 'Masukkan Konten',
+            tabsize: 2,
+            height: 120,
+            toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['codeview']]
+            ]
+        });
     </script>
     <script>
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
