@@ -51,63 +51,6 @@
         @include('layouts.frontend.footer')
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        function animateValueRupiah(id, start, end, duration) {
-            var obj = document.getElementById(id);
-            var range = end - start;
-            var current = start;
-            var increment = end > start ? 1 : -1;
-            var stepTime = Math.abs(Math.floor(duration / range));
-            var timer = setInterval(function () {
-                current += increment;
-                obj.textContent = "Rp. " + current.toLocaleString('id-ID'); // Format jumlah dengan pemisah ribuan
-                if (current == end) {
-                    clearInterval(timer);
-                }
-            }, stepTime);
-        }
-        function animateValue(id, start, end, duration) {
-            var obj = document.getElementById(id);
-            var range = end - start;
-            var current = start;
-            var increment = end > start ? 1 : -1;
-            var stepTime = Math.abs(Math.floor(duration / range));
-            var timer = setInterval(function () {
-                current += increment;
-                obj.textContent = current; // Format jumlah dengan pemisah ribuan
-                if (current == end) {
-                    clearInterval(timer);
-                }
-            }, stepTime);
-        }
 
-        // Panggil fungsi animateValue dengan nilai awal dan akhir
-        animateValueRupiah("total-amount", 0, 38041766, 3000); // Ganti 38041766 dengan jumlah donasi aktual
-
-        animateValue("total_donatur", 0, 200, 3000); // Ganti 38041766 dengan jumlah donasi aktual
-        animateValue("total_program", 0, 200, 3000); // Ganti 38041766 dengan jumlah donasi aktual
-
-    </script>
-    <script>
-        $(window).scroll(function() {
-            $('#slideRight').each(function(){
-            var imagePos = $(this).offset().top;
-            console.log(imagePos);
-            var topOfWindow = $(window).scrollTop();
-                if (imagePos < topOfWindow+400) {
-                    $(this).addClass("slideRight");
-                }
-            });
-            $('#slideLeft').each(function(){
-            var imagePos = $(this).offset().top;
-            console.log(imagePos);
-            var topOfWindow = $(window).scrollTop();
-                if (imagePos < topOfWindow+400) {
-                    $(this).addClass("slideLeft");
-                }
-            });
-
-        });
-    </script>
     @stack('js')
 </html>

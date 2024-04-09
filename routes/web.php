@@ -11,6 +11,8 @@ use App\Http\Controllers\Backend\KategoriDonasiController;
 use App\Http\Controllers\Backend\TentangKamiController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TentangKamiController as FrontentTentangKamiController;
+use App\Http\Controllers\DonasiController as FrontentDonasiController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
@@ -30,7 +32,13 @@ use Spatie\Permission\Contracts\Role;
 Route::get('/',[WelcomeController::class,'index'])->name('welcome');
 Route::get('berita',[FrontendBeritaController::class,'index'])->name('frontend.berita.index');
 Route::get('berita/{slug}',[FrontendBeritaController::class,'detail'])->name('frontend.berita.detail');
-
+// Tentang Kami
+Route::get('tentang-kami/latar-belakang',[FrontentTentangKamiController::class,'latarBelakang'])->name('frontend.tentang-kami.latar-belakang');
+Route::get('tentang-kami/visi-misi',[FrontentTentangKamiController::class,'visiMisi'])->name('frontend.tentang-kami.visi');
+Route::get('tentang-kami/keanggotaan',[FrontentTentangKamiController::class,'keanggotaan'])->name('frontend.tentang-kami.keanggotaan');
+// Donasi
+Route::get('donasi',[FrontentDonasiController::class,'index'])->name('frontend.donasi.index');
+Route::get('donasi/{slug}',[FrontentDonasiController::class,'detail'])->name('frontend.donasi.detail');
 // BACKEND
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');

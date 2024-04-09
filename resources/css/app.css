@@ -52,7 +52,7 @@ body{
     animation-play-state: paused;
 }
 .active{
-    @apply bg-blue-600 text-white ;
+    @apply bg-orange-500 text-white ;
 }
 .active:hover{
     @apply text-black
@@ -68,4 +68,8 @@ body{
 }
 .text-header{
     @apply mb-2 text-2xl font-bold tracking-tight text-orange-700 dark:text-white;
+}
+
+.nav-active{
+    @apply active:font-bold bg-orange-700 md:bg-transparent md:text-orange-700;
 }
