@@ -1,6 +1,9 @@
 @extends('welcome')
 @push('js')
 <script>
+    let rupiah = `{{ $total_rupiah }}`
+    let donatur = `{{ $total_donasi }}`
+    let program = `{{ $total_program }}`
     function animateValueRupiah(id, start, end, duration) {
         var obj = document.getElementById(id);
         var range = end - start;
@@ -31,10 +34,10 @@
     }
 
     // Panggil fungsi animateValue dengan nilai awal dan akhir
-    animateValueRupiah("total-amount", 0, 38041766, 3000); // Ganti 38041766 dengan jumlah donasi aktual
+    animateValueRupiah("total-amount", 0, rupiah, 70000); // Ganti 38041766 dengan jumlah donasi aktual
 
-    animateValue("total_donatur", 0, 200, 3000); // Ganti 38041766 dengan jumlah donasi aktual
-    animateValue("total_program", 0, 200, 3000); // Ganti 38041766 dengan jumlah donasi aktual
+    animateValue("total_donatur", 0, donatur, 3000); // Ganti 38041766 dengan jumlah donasi aktual
+    animateValue("total_program", 0, program, 3000); // Ganti 38041766 dengan jumlah donasi aktual
 
 </script>
 <script>
@@ -61,7 +64,7 @@
 @endpush
 @section('content')
 <header class="max-w-7xl max-h-fit mx-auto">
-    <img src="{{ asset('image/bag.png') }}" class="w-fit bg-cover mx-auto rounded-lg" alt="">
+    <img src="{{ $banner->gambar != null ? asset('storage/banner/'.$banner->gambar) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" class="max-w-xl bg-cover mx-auto rounded-lg" alt="">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-10 p-3 md:p-0 content-center items-start">
         <div class="p-4 space-y-4">
             <h2 class="text-4xl font-bold">Salurkan <span class="text-orange-400">Donasi</span> Anda Disini</h2>
@@ -93,69 +96,33 @@
         <p class="text-xl text-gray-400">Berita terbaru dari <b class="text-black">Lazizmu</b> .</p>
     </div>
     <div class="grid md:grid-cols-3 grid-cols-1 gap-4 content-center pt-16">
-        <div class="md:max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
-                <img class="rounded-t-lg w-full bg-cover" src="{{ asset('image/contoh-1.png') }}" alt="" />
-            </a>
-            <div class="p-5">
-                <a href="#">
-                    <h5 class="text-header">Noteworthy technology acquisitions 2021</h5>
+        @forelse ($donasi as $item)
+            <div class="md:max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <a href="{{ route('frontend.donasi.detail',$item->slug) }}">
+                    <img class="rounded-t-lg w-full bg-cover" src="{{ $item->cover != null ? asset('storage/donasi/'.$item->cover) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" alt="gambar donasi" />
                 </a>
-                <div class="flex justify-between items-center mb-5 text-gray-500 bg-gray-100 rounded-lg p-3">
-                    <span class="bg-emerald-100 text-emerald-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-emerald-200 dark:text-emerald-800">
-                        <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
-                        Kategori
-                    </span>
-                    <span class="text-xs font-sans">20-10-2024</span>
-                </div>
-                <div>
-                    <p class="text-content">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                </div>
+                <div class="p-5">
+                    <a href="{{ route('frontend.donasi.detail',$item->slug) }}">
+                        <h5 class="text-header">{{ ucwords($item->title) }}</h5>
+                    </a>
+                    <div class="flex justify-between items-center mb-5 text-gray-500 bg-gray-100 rounded-lg p-3">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-emerald-200 dark:text-emerald-800">
+                            <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
+                            {{ ucwords($item->kategori->title ?? "-") }}
+                        </span>
+                        <span class="text-xs font-sans">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i:s') }}</span>
+                    </div>
+                    <div>
+                        <p class="text-content">{{ $item->sub_content }}.</p>
+                    </div>
 
+                </div>
             </div>
-        </div>
-        <div class="md:max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
-                <img class="rounded-t-lg w-full bg-cover" src="{{ asset('image/contoh-1.png') }}" alt="" />
-            </a>
-            <div class="p-5">
-                <a href="#">
-                    <h5 class="text-header">Noteworthy technology acquisitions 2021</h5>
-                </a>
-                <div class="flex justify-between items-center mb-5 text-gray-500 bg-gray-100 rounded-lg p-3">
-                    <span class="bg-emerald-100 text-emerald-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-emerald-200 dark:text-emerald-800">
-                        <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
-                        Kategori
-                    </span>
-                    <span class="text-xs font-sans">20-10-2024</span>
-                </div>
-                <div>
-                    <p class="text-content">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                </div>
+        @empty
+            <span class="text-center font-bold bg-red-400 text-white p-4">Tidak ada data</span>
+        @endforelse
 
-            </div>
-        </div>
-        <div class="md:max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
-                <img class="rounded-t-lg w-full bg-cover" src="{{ asset('image/contoh-1.png') }}" alt="" />
-            </a>
-            <div class="p-5">
-                <a href="#">
-                    <h5 class="text-header">Noteworthy technology acquisitions 2021</h5>
-                </a>
-                <div class="flex justify-between items-center mb-5 text-gray-500 bg-gray-100 rounded-lg p-3">
-                    <span class="bg-emerald-100 text-emerald-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-emerald-200 dark:text-emerald-800">
-                        <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
-                        Kategori
-                    </span>
-                    <span class="text-xs font-sans">20-10-2024</span>
-                </div>
-                <div>
-                    <p class="text-content">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                </div>
 
-            </div>
-        </div>
     </div>
 </section>
 {{-- END SECTION DONASI --}}
@@ -270,28 +237,27 @@
         <p class="text-xl text-gray-400">Berita terbaru dari <b class="text-black">Lazizmu</b> .</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 content-center pt-16 px-4 md:px-0">
+        @forelse ($berita as $item)
         <div class="w-full md:max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
-                <img class="rounded-t-lg w-full bg-cover" src="{{ asset('image/contoh-1.png') }}" alt="" />
+            <a href="{{ route('frontend.berita.detail',$item->slug) }}">
+                <img class="rounded-t-lg w-full bg-cover" src="{{ $item->cover != null ? asset('storage/cover/'.$item->cover) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" alt="" />
             </a>
             <div class="p-5">
                 <div class="flex justify-between items-center mb-5 text-gray-500 border-b-2 p-3">
                     <span class="bg-emerald-100 text-emerald-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-emerald-200 dark:text-emerald-800">
                         <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
-                        Kategori
+                        {{ ucwords($item->kategori->title ??  '-') }}
                     </span>
-                    <span class="text-xs font-sans">20-10-2024</span>
+                    <span class="text-xs font-sans">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i:s') }}</span>
                 </div>
-                <a href="#">
-                    <h5 class="text-header">Ziska talks Lazizmu kupas diseminasi hasil riset program ekonomi</h5>
+                <a href="{{ route('frontend.berita.detail',$item->slug) }}">
+                    <h5 class="text-header">{{ ucwords($item->title) }}</h5>
                 </a>
-                <div class="mt-4">
-                    <p class="text-content">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                    </p>
+                <div class="mt-4 text-content">
+                   {{ $item->sub_content }}
                 </div>
                 <div class="flex justify-end mt-4">
-                    <a type="button" class="inline-flex items-center text-yellow-400 hover:text-yellow-600 cursor-pointer focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
+                    <a href="{{ route('frontend.berita.detail',$item->slug) }}" class="inline-flex items-center text-yellow-400 hover:text-yellow-600 cursor-pointer focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
                         Lanjutkan Membaca
                         <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
@@ -300,15 +266,18 @@
                 </div>
             </div>
         </div>
+        @empty
+            <span class="text-center font-bold bg-red-400 text-white p-4">Tidak ada data</span>
+        @endforelse
 
     </div>
     <div class="flex justify-center mt-4">
-        <button type="button" class="inline-flex items-center text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
+        <a type="button" href="{{ route('berita.index') }}" class="inline-flex items-center text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
             Informasi Selengkapnya
             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
             </svg>
-        </button>
+        </a>
     </div>
 </section>
 <div class="py-14">
@@ -329,31 +298,22 @@
         <p class="text-xl text-gray-400">Berita terbaru dari <b class="text-black">Lazizmu</b> .</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-10 p-4 md:p-0">
+        @forelse ($galeri as $item)
         <div>
             <figure class="relative max-w-fit transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0">
-                <img class="max-h-full max-w-full rounded-lg" src="{{ asset('image/bag.png') }}" alt="image description">
+                <img class="max-h-full max-w-full rounded-lg" src="{{ $item->galeri != null ? asset('storage/galeri/'.$item->galeri) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" alt="image description">
                 <figcaption class="absolute px-4 text-gray-100 dark:text-white bottom-0 bg-orange-950 h-fit p-4 w-full rounded-lg">
-                    <p class="z-50 font-semibold text-sm md:text-clip">Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+                    <p class="z-50 font-semibold text-sm md:text-clip">{{ ucwords($item->keterangan) }}</p>
                     <hr>
                     <div class="flex justify-end">
-                        <span class="font-sans text-xs md:text-clip">20-10-2024</span>
+                        <span class="font-sans text-xs md:text-clip">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}</span>
                     </div>
                 </figcaption>
             </figure>
         </div>
-        <div>
-            <figure class="relative max-w-fit transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0">
-                <img class="max-h-full max-w-full rounded-lg" src="{{ asset('image/bag.png') }}" alt="image description">
-                <figcaption class="absolute px-4 text-gray-100 dark:text-white bottom-0 bg-orange-950 h-fit p-4 w-full rounded-lg">
-                    <p class="z-50 font-semibold text-sm md:text-clip">Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
-                    <hr>
-                    <div class="flex justify-end">
-                        <span class="font-sans text-xs md:text-clip">20-10-2024</span>
-                    </div>
-                </figcaption>
-            </figure>
-        </div>
-
+        @empty
+        <span class="text-center font-bold bg-red-400 text-white p-4">Tidak ada data</span>
+        @endforelse
 
     </div>
 </section>

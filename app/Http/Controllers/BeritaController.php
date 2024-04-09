@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Informasi;
 use Illuminate\Http\Request;
 
 class BeritaController extends Controller
 {
-    public function index() {
-        return view('frontend.berita.index');
+    public function index(Request $request) {
+        $param['berita'] = Informasi::with('kategori','user')
+                        ->where('status_informasi','berita')
+                        ->when($request->search, function ($query) use ($request) {
+                            $query->where('title', 'like', '%' . $request->search . '%');
+                        })
+                        ->latest()
+                        ->paginate(10);
+        return view('frontend.berita.index',$param);
     }
 
     public function detail($slug) {
-        return view('frontend.berita.detail');
+        $param['data'] = Informasi::with('kategori','user')
+                                ->where('status_informasi','berita')
+                                ->where('slug',$slug)->first();
+        return view('frontend.berita.detail',$param);
 
     }
 }

@@ -3,7 +3,7 @@
     <section class="py-40 md:pb-48 md:px-80 max-h-fit">
         <div class="p-4 space-y-4 text-center mb-5">
             {{-- <p class="text-center font-bold text-orange-600">Marwah Salsabilah</p> --}}
-            <h2 class="text-4xl font-bold text-orange-400">Ziska talks Lazizmu kupas diseminasi hasil riset program ekonomi</h2>
+            <h2 class="text-4xl font-bold text-orange-400"> {{ ucwords($data->title ??  '-') }}</h2>
             <div class="flex justify-center gap-20 text-gray-500 text-sm">
                 <div class="inline-flex items-center">
                     <div>
@@ -12,7 +12,7 @@
                           </svg>
                     </div>
                     <div class="ml-2">
-                        <span>Marwah Salsabilah</span>
+                        <span>{{ $data->user->name }}</span>
                     </div>
                 </div>
                 <div class="inline-flex items-center">
@@ -23,17 +23,17 @@
 
                     </div>
                     <div class="ml-2">
-                        <span>20-01-2024</span>
+                        <span>{{ \Carbon\Carbon::parse($data->created_at)->translatedFormat('d F Y H:i:s') }}</span>
                     </div>
                 </div>
             </div>
             {{-- <p class="text-md text-gray-400">Diupload pada tanggal 14 Maret 2024.</p> --}}
         </div>
         <div>
-            <img src="{{ asset('image/contoh-1.png')  }}" class="w-full rounded-lg h-72 bg-cover bg-repeat" alt="">
+            <img src="{{ $data->cover != null ? asset('storage/cover/'.$data->cover) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" class="h-auto max-w-full rounded-lg mx-auto" alt="{{ $data->title }}">
         </div>
         <div class="md:p-10 p-4 text-content">
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id odit, quia illo commodi libero quae, similique deleniti eius explicabo sunt modi distinctio temporibus suscipit nihil doloribus odio inventore alias facere?</p>
+            {!! $data->content !!}
         </div>
     </section>
 @endsection
