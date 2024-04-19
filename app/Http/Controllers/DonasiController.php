@@ -12,6 +12,7 @@ class DonasiController extends Controller
                         ->when($request->search, function ($query) use ($request) {
                             $query->where('title', 'like', '%' . $request->search . '%');
                         })
+                        ->where('status','publis')
                         ->latest()
                         ->paginate(10);
         return view('frontend.donasi.index', $param);
