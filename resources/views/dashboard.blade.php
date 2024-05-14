@@ -50,11 +50,11 @@
 
             </div>
            <div class="grid grid-cols-3 gap-4 mb-4 place-items-stretch">
-               <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5">
+               <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5 border">
                     <div class="flex justify-between flex-row items-center px-4">
                         <div class="space-y-2">
                             <span class="text-sm font-medium text-gray-400 dark:text-gray-400">Total Pengguna</span>
-                            <h2 class="text-4xl font-bold dark:text-white">20</h2>
+                            <h2 class="text-4xl font-bold dark:text-white">{{ $user }}</h2>
                         </div>
 
                         <div class="bg-blue-400 rounded-lg h-fit px-5 py-5">
@@ -64,11 +64,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5">
+                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5 border">
                     <div class="flex justify-between flex-row items-center px-4">
                         <div class="space-y-2">
                             <span class="text-sm font-medium text-gray-400 dark:text-gray-400">Total Kategori</span>
-                            <h2 class="text-4xl font-bold dark:text-white">20</h2>
+                            <h2 class="text-4xl font-bold dark:text-white">{{ $kategori }}</h2>
                         </div>
 
                         <div class="bg-blue-400 rounded-lg h-fit px-5 py-5">
@@ -78,11 +78,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5">
+                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5 border">
                     <div class="flex justify-between flex-row items-center px-4">
                         <div class="space-y-2">
                             <span class="text-sm font-medium text-gray-400 dark:text-gray-400">Total Informasi</span>
-                            <h2 class="text-4xl font-bold dark:text-white">10</h2>
+                            <h2 class="text-4xl font-bold dark:text-white">{{$informasi}}</h2>
                         </div>
                         <div class="bg-blue-400 rounded-lg h-fit px-5 py-5">
                             <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -94,11 +94,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5">
+                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5 border">
                     <div class="flex justify-between flex-row items-center px-4">
                         <div class="space-y-2">
                             <span class="text-sm font-medium text-gray-400 dark:text-gray-400">Total Berita</span>
-                            <h2 class="text-4xl font-bold dark:text-white">10</h2>
+                            <h2 class="text-4xl font-bold dark:text-white">{{$berita}}</h2>
                         </div>
                         <div class="bg-blue-400 rounded-lg h-fit px-5 py-5">
                             <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
@@ -107,11 +107,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5">
+                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5 border">
                     <div class="flex justify-between flex-row items-center px-4">
                         <div class="space-y-2">
                             <span class="text-sm font-medium text-gray-400 dark:text-gray-400">Total Donasi</span>
-                            <h2 class="text-4xl font-bold dark:text-white">2</h2>
+                            <h2 class="text-4xl font-bold dark:text-white">{{$donasi}}</h2>
                         </div>
                         <div class="bg-blue-400 rounded-lg h-fit px-5 py-5">
                             <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
@@ -120,11 +120,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5">
+                <div class="h-32 rounded bg-gray-50 dark:bg-gray-800 p-5 border">
                     <div class="flex justify-between flex-row items-center px-4">
                         <div class="space-y-2">
-                            <span class="text-sm font-medium text-gray-400 dark:text-gray-400">Total Pelanggaran Pondok</span>
-                            <h2 class="text-4xl font-bold dark:text-white">10</h2>
+                            <span class="text-sm font-medium text-gray-400 dark:text-gray-400">Total Pengurus</span>
+                            <h2 class="text-4xl font-bold dark:text-white">{{ $pengurus }}</h2>
                         </div>
                         <div class="bg-blue-400 rounded-lg h-fit px-5 py-5">
                             <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
@@ -135,59 +135,7 @@
                 </div>
            </div>
 
-           <div class="grid grid-cols-1 gap-4 mb-4">
-              <div class="flex items-center col-span-2 justify-center rounded bg-gray-50 dark:bg-gray-800 w-full h-full">
-                <div id="chart" class="w-full"></div>
-              </div>
-
-           </div>
 
         </div>
     </div>
-    @push('js')
-        <script>
-            var options = {
-                series: [{
-                    name: 'Informasi',
-                    data: [
-
-                        20,10,5
-                    ]
-                }, {
-                    name: 'Donasi',
-                    data: [
-
-                        20,10,5
-                    ]
-                }],
-                chart: {
-                    height: 350,
-                    type: 'area'
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'smooth'
-                },
-                xaxis: {
-                    type: 'datetime',
-                    categories: [
-
-                    ]
-                },
-                tooltip: {
-                    x: {
-                        format: 'dd/MM/yy HH:mm'
-                    },
-                },
-            };
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
-            chart.render();
-
-
-
-
-        </script>
-    @endpush
 </x-app-layout>

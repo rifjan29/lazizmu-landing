@@ -34,18 +34,7 @@
             </div>
             <div class="text-content">
                 <span class="font-bold ">Pengelolaan dana ZISKA bertujuan :</span>
-                <ol class="max-w-full space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400">
-                    <li>
-                        Meningkatkan efektivitas dan efisiensi pelayanan dalam pengelolaan dana ZISKA dalam rangka mencapai maksud dan tujuan Persyarikatan
-                    </li>
-                    <li>
-                        Meningkatkan manfaat dana ZISKA untuk mewujudkan kesejahteraan masyarakat dan penanggulangan kemiskinan dalam rangka mencapai maksud dan tujuan Persyarikatan
-                    </li>
-                    <li>
-                        Meningkatkan kemampuan ekonomi umat melalui pemberdayaan usaha-usaha produkti.
-
-                    </li>
-                </ol>
+                {!! $data->tujuan !!}
             </div>
 
 

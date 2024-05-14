@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pengurus;
 use App\Models\TentangKami;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,7 @@ class TentangKamiController extends Controller
     public function keanggotaan() {
         $param['title'] = 'Keanggotaan';
         $param['data'] = TentangKami::first();
+        $param['pengurus'] = Pengurus::latest()->get();
         return view('frontend.tentang-kami.keanggotaan.index',$param);
     }
 }

@@ -1,31 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\TentangKami;
+use App\Models\Pengurus;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class TentangKamiController extends Controller
+class PengurusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $param['title'] = "List Tentang Kami";
-        $param['data'] = TentangKami::latest()->get();
-        $title = 'Delete Tentang Kami!';
-        $text = "Are you sure you want to delete?";
-        confirmDelete($title, $text);
-
-        return view('tentang-kami.index',$param);
+        $param['title']= 'List Pengurus';
+        $param['data'] = Pengurus::latest()->get();
+        return view('pengurus.index', $param);
     }
 
     /**
@@ -33,8 +27,11 @@ class TentangKamiController extends Controller
      */
     public function create()
     {
-        $param['title'] = "Tambah Tentang Kami";
-        return view('tentang-kami.create',$param);
+        $param['title'] = 'Create Pengurus';
+        $title = 'Delete Pengurus!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        return view('pengurus.create',$param);
     }
 
     /**
@@ -43,11 +40,8 @@ class TentangKamiController extends Controller
     public function store(Request $request)
     {
         $validateData = Validator::make($request->all(),[
-            'latar_belakang' => 'required',
-            'visi' => 'required',
-            'misi' => 'required',
-            'prinsip' => 'required',
-            'tujuan' => 'required',
+            'nama' => 'required',
+            'jabatan' => 'required',
             'file_input' => 'required',
         ],[
             'required' => ':attribute data harus terisi',
@@ -60,31 +54,27 @@ class TentangKamiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         }
         DB::beginTransaction();
         try {
             DB::commit();
-            $tambah = new TentangKami;
+            $tambah = new Pengurus;
             if ($request->hasFile('file_input')) {
                 $file = $request->file('file_input');
                 $filename = Carbon::now()->translatedFormat('his').'.'.$file->extension();
-                $file->storeAs('public/tentang/'.$filename);
+                $file->storeAs('public/pengurus/'.$filename);
                 $tambah->gambar = $filename;
             }
-            $tambah->latar_belakang = $request->get('latar_belakang');
-            $tambah->visi = $request->get('visi');
-            $tambah->misi = $request->get('misi');
-            $tambah->prinsip = $request->get('prinsip');
-            $tambah->tujuan = $request->get('tujuan');
-            $tambah->user_id = Auth::user()->id;
+            $tambah->nama = $request->get('nama');
+            $tambah->jabatan = $request->get('jabatan');
             $tambah->save();
             alert()->success('Sukses','Berhasil menambahkan data.');
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->error('Error','Terjadi kesalahan.');
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         }
     }
 
@@ -93,9 +83,7 @@ class TentangKamiController extends Controller
      */
     public function show(string $id)
     {
-        $param['title'] = "Detail Tentang Kami";
-        $param['data'] = TentangKami::find($id);
-        return view('tentang-kami.show',$param);
+        //
     }
 
     /**
@@ -103,9 +91,9 @@ class TentangKamiController extends Controller
      */
     public function edit(string $id)
     {
-        $param['title'] = "Edit Tentang Kami";
-        $param['data'] = TentangKami::find($id);
-        return view('tentang-kami.edit',$param);
+        $param['title'] = 'Edit Pengurus';
+        $param['data'] = Pengurus::find($id);
+        return view('pengurus.edit',$param);
     }
 
     /**
@@ -114,10 +102,8 @@ class TentangKamiController extends Controller
     public function update(Request $request, string $id)
     {
         $validateData = Validator::make($request->all(),[
-            'latar_belakang' => 'required',
-            'visi' => 'required',
-            'misi' => 'required',
-            'prinsip' => 'required',
+            'nama' => 'required',
+            'jabatan' => 'required',
         ],[
             'required' => ':attribute data harus terisi',
         ]);
@@ -129,34 +115,30 @@ class TentangKamiController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         }
         DB::beginTransaction();
         try {
             DB::commit();
-            $update = TentangKami::findOrFail($id);
+            $edit = Pengurus::find($id);
             if ($request->hasFile('file_input')) {
-                $file = $request->file('file_input');
-                $path = 'public/tentang/' . $update->gambar;
+                $path = 'public/pengurus/' . $edit->gambar;
                 Storage::delete($path);
 
+                $file = $request->file('file_input');
                 $filename = Carbon::now()->translatedFormat('his').'.'.$file->extension();
-                $file->storeAs('public/tentang/'.$filename);
-                $update->gambar = $filename;
+                $file->storeAs('public/pengurus/'.$filename);
+                $edit->gambar = $filename;
             }
-            $update->latar_belakang = $request->get('latar_belakang');
-            $update->visi = $request->get('visi');
-            $update->misi = $request->get('misi');
-            $update->prinsip = $request->get('prinsip');
-            $update->tujuan = $request->get('tujuan');
-            $update->user_id = Auth::user()->id;
-            $update->update();
+            $edit->nama = $request->get('nama');
+            $edit->jabatan = $request->get('jabatan');
+            $edit->update();
             alert()->success('Sukses','Berhasil mengganti data.');
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->error('Error','Terjadi kesalahan.');
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         }
     }
 
@@ -168,18 +150,18 @@ class TentangKamiController extends Controller
         DB::beginTransaction();
         try {
             DB::commit();
-            $delete = TentangKami::find($id);
+            $delete = Pengurus::find($id);
             if ($delete->gambar) {
-                $path = 'public/tentang/' . $delete->gambar;
+                $path = 'public/pengurus/' . $delete->gambar;
                 Storage::delete($path);
             }
             $delete->delete();
             alert()->success('Sukses','Berhasil dihapus.');
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         } catch (Exception $th) {
             DB::rollBack();
             alert()->success('Error','Terjadi kesalahan.');
-            return redirect()->route('tentang-kami.index');
+            return redirect()->route('pengurus.index');
         }
     }
 }

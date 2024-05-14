@@ -13,7 +13,9 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TentangKamiController as FrontentTentangKamiController;
 use App\Http\Controllers\DonasiController as FrontentDonasiController;
+use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\Pengurus;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
 
@@ -67,6 +69,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('user', UserController::class);
         //Tentang Kami
         Route::resource('tentang-kami',TentangKamiController::class);
+        // Pengurus
+        Route::resource('pengurus',PengurusController::class);
     });
 });
 Route::middleware('auth')->group(function () {

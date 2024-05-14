@@ -19,6 +19,7 @@ class BeritaController extends Controller
      */
     public function index()
     {
+
         $param['title'] = "List Berita";
         $param['data'] = Informasi::with('kategori')->where('status_informasi','berita')->latest()->get();
 
@@ -63,7 +64,7 @@ class BeritaController extends Controller
             $html .= "</ol>";
 
             alert()->html('Terjadi kesalahan eror!', $html, 'error')->autoClose(5000);
-            return redirect()->route('berita.index');
+            return redirect()->route('petugas.create');
         }
         DB::beginTransaction();
         try {
