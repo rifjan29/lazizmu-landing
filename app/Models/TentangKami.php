@@ -16,6 +16,8 @@ class TentangKami extends Model
         'prinsip',
         'gambar',
         'user_id',
+        'no_wa',
+        'tujuan',
     ];
 
     public function user() {

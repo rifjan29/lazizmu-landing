@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Informasi;
+use App\Models\TentangKami;
 use Illuminate\Http\Request;
 
 class BeritaController extends Controller
@@ -15,6 +16,8 @@ class BeritaController extends Controller
                         })
                         ->latest()
                         ->paginate(10);
+        $param['tentang_kami'] = TentangKami::first();
+
         return view('frontend.berita.index',$param);
     }
 
@@ -22,6 +25,8 @@ class BeritaController extends Controller
         $param['data'] = Informasi::with('kategori','user')
                                 ->where('status_informasi','berita')
                                 ->where('slug',$slug)->first();
+
+        $param['tentang_kami'] = TentangKami::first();
         return view('frontend.berita.detail',$param);
 
     }

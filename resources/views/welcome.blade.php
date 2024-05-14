@@ -43,7 +43,7 @@
             @yield('content')
         </div>
         <div class="fixed bottom-8 right-8 ">
-            <a href="https://wa.me/628123456789" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white rounded-full py-4 px-8 shadow-lg flex items-center justify-center gap-2">
+            <a href="https://wa.me/{{ $tentang_kami->no_wa }}" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white rounded-full py-4 px-8 shadow-lg flex items-center justify-center gap-2">
                 @include('components.whatsapp')
                 <span>Hubungi Kami</span>
             </a>

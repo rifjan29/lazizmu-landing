@@ -6,6 +6,7 @@ use App\Models\Banner;
 use App\Models\Donasi;
 use App\Models\Galeri;
 use App\Models\Informasi;
+use App\Models\TentangKami;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\Do_;
 
@@ -19,6 +20,7 @@ class WelcomeController extends Controller
         $param['donasi'] = Donasi::with('kategori','user')->where('status','publis')->where('status_donasi','berjalan')->latest()->get()->take(3);
         $param['berita'] = Informasi::with('kategori','user')->where('status_informasi','berita')->latest()->get()->take(3);
         $param['galeri'] = Galeri::with('user')->latest()->get()->take(3);
+        $param['tentang_kami'] = TentangKami::first();
         return view('frontend.welcome',$param);
     }
 }

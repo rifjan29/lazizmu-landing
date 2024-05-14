@@ -49,6 +49,7 @@ class TentangKamiController extends Controller
             'prinsip' => 'required',
             'tujuan' => 'required',
             'file_input' => 'required',
+            'no_wa' => 'required',
         ],[
             'required' => ':attribute data harus terisi',
         ]);
@@ -77,6 +78,7 @@ class TentangKamiController extends Controller
             $tambah->misi = $request->get('misi');
             $tambah->prinsip = $request->get('prinsip');
             $tambah->tujuan = $request->get('tujuan');
+            $tambah->no_wa = $request->get('no_wa');
             $tambah->user_id = Auth::user()->id;
             $tambah->save();
             alert()->success('Sukses','Berhasil menambahkan data.');
@@ -149,12 +151,14 @@ class TentangKamiController extends Controller
             $update->misi = $request->get('misi');
             $update->prinsip = $request->get('prinsip');
             $update->tujuan = $request->get('tujuan');
+            $update->no_wa = $request->get('no_wa');
             $update->user_id = Auth::user()->id;
             $update->update();
             alert()->success('Sukses','Berhasil mengganti data.');
             return redirect()->route('tentang-kami.index');
         } catch (Exception $th) {
             DB::rollBack();
+            return $th;
             alert()->error('Error','Terjadi kesalahan.');
             return redirect()->route('tentang-kami.index');
         }
