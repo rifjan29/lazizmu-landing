@@ -1,6 +1,12 @@
 @extends('welcome')
 @push('js')
 <script>
+    $('#pilih_program').on('change',function() {
+        $('#searchForm').submit()
+    })
+    $('#pilih_status').on('change',function() {
+        $('#searchFormStatus').submit()
+    })
     let rupiah = `{{ $total_rupiah }}`
     let donatur = `{{ $total_donasi }}`
     let program = `{{ $total_program }}`
@@ -34,7 +40,6 @@
     }
 
     // Panggil fungsi animateValue dengan nilai awal dan akhir
-    animateValueRupiah("total-amount", 0, rupiah, 70000); // Ganti 38041766 dengan jumlah donasi aktual
 
     animateValue("total_donatur", 0, donatur, 3000); // Ganti 38041766 dengan jumlah donasi aktual
     animateValue("total_program", 0, program, 3000); // Ganti 38041766 dengan jumlah donasi aktual
@@ -64,25 +69,25 @@
 @endpush
 @section('content')
 <header class="max-w-7xl max-h-fit mx-auto">
-    <img src="{{ $banner->gambar != null ? asset('storage/banner/'.$banner->gambar) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" class="max-w-xl bg-cover mx-auto rounded-lg" alt="">
+    <img src="{{ $banner->gambar != null ? asset('storage/banner/'.$banner->gambar) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" class="w-full bg-cover mx-auto rounded-lg" alt="">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-10 p-3 md:p-0 content-center items-start">
         <div class="p-4 space-y-4">
             <h2 class="text-4xl font-bold">Salurkan <span class="text-orange-400">Donasi</span> Anda Disini</h2>
             <p class="text-xl text-gray-400"><b class="text-black">Lazizmu</b> akan selalu siap untuk membantu donasi anda.</p>
-            <button type="button" class="text-white bg-orange-400 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Donasi Sekarang</button>
+            <a href="{{ route('frontend.donasi.index') }}" type="button" class="text-white bg-orange-400 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Donasi Sekarang</a>
         </div>
         <div class="rounded-md border-2 border-orange-300 p-5 h-fit mt-5">
             <div class="grid grid-cols-3 gap-4 content-center">
                 <div>
-                    <h5 id="total-amount" class="text-2xl font-bold text-orange-600">Rp. 0</h5>
+                    <h5 id="" class="text-lg font-bold text-orange-600">Rp. {{ $total_rupiah }}</h5>
                     <p class="text-sm font-medium text-gray-400">Total Donasi Terkumpul</p>
                 </div>
                 <div>
-                    <h5 id="total_donatur" class="text-2xl font-bold text-orange-600">546</h5>
+                    <h5 id="total_donatur" class="text-lg font-bold text-orange-600">546</h5>
                     <p class="text-sm font-medium text-gray-400">Donatur Terdaftar</p>
                 </div>
                 <div>
-                    <h5 id="total_program" class="text-2xl font-bold text-orange-600">40</h5>
+                    <h5 id="total_program" class="text-lg font-bold text-orange-600">40</h5>
                     <p class="text-sm font-medium text-gray-400">Program Donasi</p>
                 </div>
             </div>
@@ -93,7 +98,37 @@
 <section class="max-w-7xl max-h-fit py-20 mx-auto">
     <div class="p-4 space-y-4 text-center">
         <h2 class="text-4xl font-bold">Program <span class="text-orange-400">Donasi</span> Berjalan</h2>
-        <p class="text-xl text-gray-400">Berita terbaru dari <b class="text-black">Lazizmu</b> .</p>
+        <p class="text-xl text-gray-400">Donasi terbaru dari <b class="text-black">Lazizmu</b> .</p>
+    </div>
+    <div>
+        <div class="flex justify-end gap-3">
+            <div>
+                <form action="{{ route('welcome') }}" method="GET" id="searchForm">
+                    <label for="wali_santri" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori Donasi</label>
+                    <select name="pilih_program" id="pilih_program" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="0"> -- Pilih Program -- </option>
+                        <option {{ request('pilih_program') == 'pendidikan' ? 'selected' : '' }} value="pendidikan">Pendidikan</option>
+                        <option {{ request('pilih_program') == 'kesehatan' ? 'selected' : '' }} value="kesehatan">Kesehatan</option>
+                        <option {{ request('pilih_program') == 'ekonomi' ? 'selected' : '' }} value="ekonomi">Ekonomi</option>
+                        <option {{ request('pilih_program') == 'kemanusiaan' ? 'selected' : '' }} value="kemanusiaan">Kemanusiaan</option>
+                        <option {{ request('pilih_program') == 'sosial' ? 'selected' : '' }} value="sosial-dakwah">Sosial Dakwah</option>
+                        <option {{ request('pilih_program') == 'lingkungan' ? 'selected' : '' }} value="lingkungan">Lingkungan</option>
+                        <option {{ request('pilih_program') == 'semua' ? 'selected' : '' }} value="semua">Semua</option>
+                    </select>
+                </form>
+            </div>
+            <div>
+                <form action="{{ route('welcome') }}" method="GET" id="searchFormStatus">
+                    <label for="wali_santri" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori Status Donasi</label>
+                    <select name="status_donasi" id="pilih_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="0"> -- Pilih Status -- </option>
+                        <option {{ request('status_donasi') == 'berjalan' ? 'selected' : '' }} value="berjalan">Berjalan</option>
+                        <option {{ request('status_donasi') == 'selesai' ? 'selected' : '' }} value="selesai">Selesai</option>
+                        <option {{ request('status_donasi') == 'semua' ? 'selected' : '' }} value="semua">Semua</option>
+                    </select>
+                </form>
+            </div>
+        </div>
     </div>
     <div class="grid md:grid-cols-3 grid-cols-1 gap-4 content-center pt-16">
         @forelse ($donasi as $item)
@@ -109,7 +144,8 @@
                         <span class="bg-emerald-100 text-emerald-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-emerald-200 dark:text-emerald-800">
                             <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
                             {{ ucwords($item->kategori->title ?? "-") }}
-                        </span>
+                        </span> |
+                        <span class="text-xs font-bold {{ $item->status_donasi == 'berjalan' ? 'text-blue-500' : 'text-red-500' }}">{{ ucwords($item->status_donasi) }}</span> |
                         <span class="text-xs font-sans">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i:s') }}</span>
                     </div>
                     <div>
@@ -272,7 +308,7 @@
 
     </div>
     <div class="flex justify-center mt-4">
-        <a type="button" href="{{ route('berita.index') }}" class="inline-flex items-center text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
+        <a type="button" href="{{ route('frontend.berita.index') }}" class="inline-flex items-center text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
             Informasi Selengkapnya
             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>

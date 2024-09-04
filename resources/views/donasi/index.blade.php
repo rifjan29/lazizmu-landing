@@ -19,7 +19,6 @@
                     },
                     method: "GET",
                     success: (res) => {
-                        console.log(res);
                         // Assuming you have a modal with an ID 'show-modal'
                         $('#update-modal #id').val(res.id);
                         $('#update-modal #total_donasi').val(formatRupiah(res.total_dana));
@@ -31,31 +30,29 @@
 
                     }
                 })
-                function formatRupiah(angka) {
-                    let cleaned = angka.replace(/\D/g, ""); // Bersihkan dari non-digit
-                    let length = cleaned.length;
+                function formatRupiah(angka, prefix) {
+                    var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                        split = number_string.split(","),
+                        sisa = split[0].length % 3,
+                        rupiah = split[0].substr(0, sisa),
+                        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-                    // Jika panjang angka lebih dari 2, lakukan pemisahan dengan titik setiap 3 digit
-                    if (length > 2) {
-                        let integerPart = cleaned.substring(0, length - 2);
-                        let decimalPart = cleaned.substring(length - 2, length);
-
-                        integerPart = integerPart.split("").reverse().join("")
-                            .match(/.{1,3}/g)
-                            .join(".")
-                            .split("").reverse().join("");
-
-                        return `${integerPart}`;
-                    } else {
-                        // Jika panjang angka kurang dari atau sama dengan 2, anggap sebagai bagian desimal saja
-                        return cleaned;
+                    // tambahkan titik jika yang di input sudah menjadi angka ribuan
+                    if (ribuan) {
+                        separator = sisa ? "." : "";
+                        rupiah += separator + ribuan.join(".");
                     }
+
+                    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+                    return prefix == undefined ? rupiah : rupiah ? rupiah : "";
                 }
                 var total_donasi = document.getElementById("total_donasi");
                 total_donasi.value = formatRupiah(total_donasi.value);
                 total_donasi.addEventListener("keyup", function(e) {
                     total_donasi.value = formatRupiah(this.value);
+
                 });
+
             })
         </script>
     @endpush

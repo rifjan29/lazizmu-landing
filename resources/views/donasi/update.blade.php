@@ -65,7 +65,7 @@
                                 <hr>
                             </header>
                             <div class="flex justify-between mb-4">
-                                <h4 class="font-bold text-sm">Total Donasi Terkumpul : Rp. {{ number_format($data->total_dana, 2, ',', '.') }} </h4>
+                                <h4 class="font-bold text-sm" id="total_donasi">Total Donasi Terkumpul : Rp. {{ number_format($data->total_dana, 2, ',', '.') }} </h4>
                                 <h4 class="font-bold text-sm">Total Donatur : {{ $data->total_donatur }} Donatur</h4>
                             </div>
                             <hr>

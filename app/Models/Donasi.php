@@ -24,7 +24,7 @@ class Donasi extends Model
     ];
 
     function kategori() {
-        return $this->belongsTo(Kategori::class,'kategori_id','id');
+        return $this->belongsTo(KategoriDonasi::class,'kategori_id','id');
     }
     function user() {
         return $this->belongsTo(User::class,'user_id','id');

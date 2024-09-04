@@ -32,15 +32,15 @@ use Spatie\Permission\Contracts\Role;
 
 // Frontend
 Route::get('/',[WelcomeController::class,'index'])->name('welcome');
-Route::get('berita',[FrontendBeritaController::class,'index'])->name('frontend.berita.index');
-Route::get('berita/{slug}',[FrontendBeritaController::class,'detail'])->name('frontend.berita.detail');
+Route::get('berita-frontend',[FrontendBeritaController::class,'index'])->name('frontend.berita.index');
+Route::get('berita-frontend/{slug}',[FrontendBeritaController::class,'detail'])->name('frontend.berita.detail');
 // Tentang Kami
-Route::get('tentang-kami/latar-belakang',[FrontentTentangKamiController::class,'latarBelakang'])->name('frontend.tentang-kami.latar-belakang');
-Route::get('tentang-kami/visi-misi',[FrontentTentangKamiController::class,'visiMisi'])->name('frontend.tentang-kami.visi');
-Route::get('tentang-kami/keanggotaan',[FrontentTentangKamiController::class,'keanggotaan'])->name('frontend.tentang-kami.keanggotaan');
+Route::get('tentang-kami-frontend/latar-belakang',[FrontentTentangKamiController::class,'latarBelakang'])->name('frontend.tentang-kami.latar-belakang');
+Route::get('tentang-kami-frontend/visi-misi',[FrontentTentangKamiController::class,'visiMisi'])->name('frontend.tentang-kami.visi');
+Route::get('tentang-kami-frontend/keanggotaan',[FrontentTentangKamiController::class,'keanggotaan'])->name('frontend.tentang-kami.keanggotaan');
 // Donasi
-Route::get('donasi',[FrontentDonasiController::class,'index'])->name('frontend.donasi.index');
-Route::get('donasi/{slug}',[FrontentDonasiController::class,'detail'])->name('frontend.donasi.detail');
+Route::get('donasi-frontend',[FrontentDonasiController::class,'index'])->name('frontend.donasi.index');
+Route::get('donasi-frontend/{slug}',[FrontentDonasiController::class,'detail'])->name('frontend.donasi.detail');
 // BACKEND
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
