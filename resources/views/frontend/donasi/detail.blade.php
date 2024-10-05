@@ -55,8 +55,18 @@
                             </div>
                             <hr>
                         </div>
-                        <div>
-                            <a href="https://wa.me/628123456789" target="_blank" class="text-white w-full cursor-pointer bg-orange-400 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Donasi Sekarang</a>
+                        <div class="w-full">
+                            @php
+                                $message = 'Assalamualaikum,Saya ingin donasi dengan campaign :'.$data->title;
+                                // Encode message to be URL friendly
+                                $encodedMessage = urlencode($message);
+                                $whatsappUrl = "https://api.whatsapp.com/send/?phone=$no_wa&text=$encodedMessage&app_absent=0";
+                            @endphp
+                            @if ($data->status_donasi == 'berjalan')
+                                <a href="{{ $whatsappUrl }}" target="_blank" class="text-white w-full cursor-pointer bg-orange-400 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Donasi Sekarang</a>
+                            @else
+                                <p class="text-center font-bold text-orange-600 bg-red-200 p-3 rounded-sm">SELESAI</p>
+                            @endif
                         </div>
                     </div>
                 </div>

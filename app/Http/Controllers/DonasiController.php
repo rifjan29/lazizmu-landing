@@ -24,6 +24,7 @@ class DonasiController extends Controller
         $param['tentang_kami'] = TentangKami::first();
         $param['title'] = 'Detail Donasi';
         $param['data'] = Donasi::with('kategori','user')->where('slug',$slug)->first();
+        $param['no_wa'] = TentangKami::first()->no_wa;
         return view('frontend.donasi.detail',$param);
     }
 }

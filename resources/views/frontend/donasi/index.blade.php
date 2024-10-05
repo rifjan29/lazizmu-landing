@@ -21,7 +21,7 @@
         <div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 content-center pt-16 px-4 md:px-0">
                 @forelse ($donasi as $item)
-                    <div class="w-full md:max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <a href="{{ route('frontend.donasi.detail',$item->slug) }}">
                             <img class="rounded-t-lg w-full bg-cover" src="{{ $item->cover != null ? asset('storage/donasi/'.$item->cover) : 'https://flowbite.com/docs/images/examples/image-2@2x.jpg' }}" alt="{{ $item->title }}" />
                         </a>
@@ -31,6 +31,9 @@
                                     <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
                                     {{ ucwords($item->kategori->title ?? "-") }}
                                 </span>
+                                 |
+                                <span class="text-xs font-bold {{ $item->status_donasi == 'berjalan' ? 'text-blue-500 bg-blue-100 p-1' : 'text-red-500 bg-red-100 p-1' }}">{{ ucwords($item->status_donasi) }}</span> |
+
                                 <span class="text-xs font-sans">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i:s') }}</span>
                             </div>
                             <a href="#">
